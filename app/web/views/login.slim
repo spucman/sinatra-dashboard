@@ -1,0 +1,42 @@
+doctype html
+html
+  head
+    title Admin Dashboard Login
+    include header_basic
+
+  body
+    main
+      .modal tabindex="-1" style="display:block"
+        .modal-dialog.modal-dialog-centered.modal-md
+          .modal-content
+            .modal-header
+              img.img-fluid alt="Logo" src="/assets/logo.svg"
+            .modal-body
+              form.form role="form" action="/login" method="post"
+                fieldset
+                  .modal-body
+                    - if flash.has?('error') && !flash['error'].nil? && !flash['error']&.strip&.empty?
+                      .alert.alert-danger role="alert"
+                        = flash['error']
+                    .md-form.input-group.mb-3
+                      input#email.form-control placeholder="E-mail" name="email" type="email" autofocus=true value="admin@example.com"
+                      javascript:
+                        document.getElementById("email").addEventListener("keyup", function(event) {
+                          if (event.keyCode === 13) {
+                            event.preventDefault();
+                            document.getElementById("login").click();
+                          }
+                        });
+                    
+                    .md-form.input-group.mb-3
+                        input#password.form-control placeholder="Password" name="password" type="password" value="admin@example.com"
+                        javascript:
+                          document.getElementById("password").addEventListener("keyup", function(event) {
+                            if (event.keyCode === 13) {
+                              event.preventDefault();
+                              document.getElementById("login").click();
+                            }
+                          });
+
+                .modal-footer
+                    button#login.btn.btn-lg.btn-main.btn-block type="submit" Login

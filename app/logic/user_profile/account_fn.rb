@@ -2,7 +2,6 @@
 
 require_relative '../../ext/user_profile'
 require_relative '../../ext/auth'
-require_relative '../../ext/auth_token'
 
 # Defines support functions applied to user profiles
 module UserProfile

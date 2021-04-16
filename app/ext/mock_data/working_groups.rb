@@ -32,18 +32,12 @@ module MockData
     can_be_deleted: true
   )
 
-  FULL_ACCESS_USER.working_groups = [
-    WORKING_GROUP_1,
-    WORKING_GROUP_2
-  ]
+  FULL_ACCESS_USER.working_groups << WORKING_GROUP_1
+  FULL_ACCESS_USER.working_groups << WORKING_GROUP_2
 
-  USER_ACCESS_USER.working_groups = [
-    WORKING_GROUP_1,
-    WORKING_GROUP_2
-  ]
+  USER_ACCESS_USER.working_groups << WORKING_GROUP_1
+  USER_ACCESS_USER.working_groups << WORKING_GROUP_2
 
-  REPORT_ACCESS_USER.working_groups = [
-    WORKING_GROUP_1,
-    WORKING_GROUP_2
-  ]
+  REPORT_ACCESS_USER.working_groups << WORKING_GROUP_1
+  REPORT_ACCESS_USER.working_groups << WORKING_GROUP_2
 end

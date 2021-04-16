@@ -9,13 +9,6 @@ require_relative '../mock_data'
 module ExtAuth
   WebMock.enable!
 
-  MockData::ALL_USERS.each do |user|
-    _create_sign_in_stub(user)
-    _create_activate_deactivate_user_stub(user.token)
-    _create_send_reset_password_email_stub(user.email)
-    _create_fetch_auth_meta_data_stub(user.token)
-  end
-
   def self._create_sign_in_stub(user)
     email = user.email
 
@@ -54,8 +47,8 @@ module ExtAuth
 
   def self._create_activate_deactivate_user_stub(token)
     MockData::ALL_USERS.each do |affected_user|
-      _activate_user_with_token(token, affected_user.email)
-      _deactivate_user_with_token(token, affected_user.email)
+      _create_activate_user_with_token_stub(token, affected_user.email)
+      _create_deactivate_user_with_token_stub(token, affected_user.email)
     end
   end
 
@@ -72,5 +65,12 @@ module ExtAuth
   def self._create_send_reset_password_email_stub(email)
     WebMock::API.stub_request(:post, _create_url('/user/reset-password-mail'))
                 .with(body: { 'email': email })
+  end
+
+  MockData::ALL_USERS.each do |user|
+    _create_sign_in_stub(user)
+    _create_activate_deactivate_user_stub(user.token)
+    _create_send_reset_password_email_stub(user.email)
+    _create_fetch_auth_meta_data_stub(user.token)
   end
 end
