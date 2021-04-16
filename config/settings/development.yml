@@ -1,0 +1,7 @@
+feature:
+  change_role:
+    enabled: false
+  deactivate_account:
+    enabled: true
+  logout_user:
+    enabled: true

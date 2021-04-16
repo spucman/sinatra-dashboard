@@ -1,24 +1,7 @@
 # frozen_string_literal: true
 
-require_relative ''
-
-module MockUser
-  Role = Struct.new(:key, :name, :features, keyword_init: true)
-  UserData = Struct.new(
-    :user_id,
-    :token,
-    :email,
-    :first_name,
-    :last_name,
-    :role,
-    :activated,
-    :timezone,
-    :subscription,
-    keyword_init: true
-  )
-
-  ALL_USERS = [FULL_ACCESS_USER, USER_ACCESS_USER, REPORT_ACCESS_USER].freeze
-
+# Module which contains all data
+module MockData
   FULL_ACCESS_USER = UserData.new(
     user_id: '1',
     token: 'adminToken',
@@ -40,7 +23,14 @@ module MockUser
     ),
     activated: true,
     timezone: 'UTC+00:00',
-    subscription: false
+    activation_date: '2021-02-03T04:05:06',
+    sign_up_date: '2021-02-03T04:05:06',
+    last_signin_date: '2021-04-03T04:05:06',
+    possesses_api_credentials: true,
+    reset_password_code_creation_time: nil,
+    reset_password_code_valid: false,
+    subscription: false,
+    working_groups: []
   )
 
   USER_ACCESS_USER = UserData.new(
@@ -63,7 +53,14 @@ module MockUser
     ),
     activated: true,
     timezone: 'UTC+00:00',
-    subscription: false
+    activation_date: '2021-02-03T04:05:06',
+    sign_up_date: '2021-02-03T04:05:06',
+    last_signin_date: '2021-04-03T04:05:06',
+    possesses_api_credentials: true,
+    reset_password_code_creation_time: nil,
+    reset_password_code_valid: false,
+    subscription: false,
+    working_groups: []
   )
 
   REPORT_ACCESS_USER = UserData.new(
@@ -82,6 +79,13 @@ module MockUser
     ),
     activated: true,
     timezone: 'UTC+00:00',
-    subscription: false
+    activation_date: '2021-02-03T04:05:06',
+    sign_up_date: '2021-02-03T04:05:06',
+    last_signin_date: '2021-04-03T04:05:06',
+    possesses_api_credentials: true,
+    reset_password_code_creation_time: '2021-04-03T04:05:06',
+    reset_password_code_valid: false,
+    subscription: false,
+    working_groups: []
   )
 end

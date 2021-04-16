@@ -1,0 +1,9 @@
+feature:
+  change_role:
+    enabled: true
+  deactivate_account:
+    enabled: true
+  logout_user:
+    enabled: true
+
+log_level: 'INFO'
