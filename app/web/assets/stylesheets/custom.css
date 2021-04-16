@@ -1,0 +1,267 @@
+body {
+    background-color: #fff; 
+}
+
+header {
+    background-color: #fff;
+}
+
+.dark-background {
+    background-color: #323c42;
+}
+
+.dark-color {
+    color: #323c42;
+}
+
+.btn-main {
+    color: #fff;
+    background-color: #4964e7 !important
+}
+
+.btn-main:hover {
+    color: #fff;
+    background-color: #5a95f5
+}
+
+.btn-main:focus,
+.btn-main.focus {
+    -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15)
+}
+
+.btn-main:focus,
+.btn-main:active,
+.btn-main.active {
+    background-color: #0b51c5
+}
+
+.btn-main.dropdown-toggle {
+    background-color: #4285f4 !important
+}
+
+.btn-main.dropdown-toggle:hover,
+.btn-main.dropdown-toggle:focus {
+    background-color: #5ac4f5 !important
+}
+
+.btn-main:not([disabled]):not(.disabled):active,
+.btn-main:not([disabled]):not(.disabled).active,
+.show>.btn-main.dropdown-toggle {
+    background-color: #0b51c5 !important;
+    -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15)
+}
+
+.btn-main:not([disabled]):not(.disabled):active:focus,
+.btn-main:not([disabled]):not(.disabled).active:focus,
+.show>.btn-main.dropdown-toggle:focus {
+    -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15)
+}
+
+table.table a.btn.btn-main {
+    color: #fff
+}
+
+.link-main {
+    color: #4964e7;
+}
+
+.link-main:hover {
+    color: #334fdf;
+}
+
+.flexible-content {
+    -webkit-transition: padding-left 0.3s;
+    transition: padding-left 0.3s;
+    padding-left: 270px;
+}
+
+.flexible-navbar {
+    -webkit-transition: padding-left 0.5s;
+    transition: padding-left 0.5s;
+    padding-left: 270px;
+}
+
+.sidebar-fixed {
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 270px;
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    z-index: 1030;
+    background-color: #fff;
+    padding: 1.5rem;
+    padding-top: 0;
+}
+
+.sidebar-fixed .logo-wrapper img {
+    width: 100%;
+    padding: 2.5rem;
+}
+
+.sidebar-fixed .list-group-item {
+    display: block !important;
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+    border-style: none;
+}
+
+.sidebar-fixed .list-group .active {
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 5px;
+}
+
+.sidebar-fixed.list-group-item-action:focus, .list-group-item-action:hover {
+    color: #4964e7;
+    background-color: #fff;
+}
+
+.sidebar-fixed .list-group .list-group-item.active {
+    background-color: #4964e7;
+    border-color: #4964e7;
+}
+
+.sidebar-fixed .list-group .list-group-item.active:hover {
+    color: #fff;
+    background-color: #334fdf;
+}
+
+@media (max-width: 1199.98px) {
+    .sidebar-fixed {
+        display: none;
+   }
+    .flexible-content {
+        padding-left: 0;
+   }
+    .flexible-navbar {
+        padding-left: 10px;
+   }
+}
+
+table .table td:first-child span {
+    font-weight: bold;
+}
+
+table .table thead span {
+    font-weight: bold;
+}
+
+table .table .sync-warn {
+    color: #d77630;
+    cursor: pointer;
+    float: right;
+    line-height: 10px;
+}
+
+table .subTablePadding {
+    padding-left: 2rem;
+    padding-right: 4rem;
+}
+
+h3 .sync-warn {
+    color: #d77630;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.alert-warning .fa-refresh {
+    margin-right: 4px;
+}
+
+.fa-refresh:before {
+    content: "\f021";
+}
+
+.compact {
+    line-height: 10px;
+    margin-bottom: 0px;
+}
+
+.btnCaption {
+    text-align: left;
+    text-transform: none;
+    font-weight: bold;
+}
+
+.table.b-table > tfoot > tr > [aria-sort], .table.b-table thead > tr > [aria-sort] {
+    cursor: pointer;
+    background-image: none;
+    background-repeat: no-repeat;
+    background-size: 0.65em 1em;
+    background-position: right 0.375rem center;
+    padding-right: calc(.75rem + .65em);
+}
+
+.table.b-table > tfoot > tr > [aria-sort=none], .table.b-table thead > tr > [aria-sort=none] {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' preserveAspectRatio='none'%3E%3Cpath opacity='.3' d='M51 1l25 23 24 22H1l25-22zm0 100l25-23 24-22H1l25 22z'/%3E%3C/svg%3E");
+}
+
+.table.b-table > tfoot > tr > [aria-sort=ascending], .table.b-table thead > tr > [aria-sort=ascending] {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' preserveAspectRatio='none'%3E%3Cpath d='M51 1l25 23 24 22H1l25-22z'/%3E%3Cpath opacity='.3' d='M51 101l25-23 24-22H1l25 22z'/%3E%3C/svg%3E");
+}
+
+.table.b-table > tfoot > tr > [aria-sort=descending], .table.b-table thead > tr > [aria-sort=descending] {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' preserveAspectRatio='none'%3E%3Cpath opacity='.3' d='M51 1l25 23 24 22H1l25-22z'/%3E%3Cpath d='M51 101l25-23 24-22H1l25 22z'/%3E%3C/svg%3E");
+}
+
+.img-profile {
+    width: 22px;
+}
+
+.modal-backdrop {
+    opacity: 65%;
+}
+
+.navbar-img {
+    width: 24px;
+    height: 100%;
+}
+
+.navbar-space {
+    margin-right: 25px;
+}
+
+iframe.preview {
+    width: 100%;
+    scroll-behavior: auto;
+    border-width: 0px;
+    height: 800px;
+}
+
+.top_navbar {
+    padding: .5rem 1rem;
+}
+
+.align-item {
+    align-items: center;
+    display: flex;
+}
+
+.weekly-search-middle {
+    width: 220px;
+    margin: 0 auto;
+}
+
+.weekly-search-middle .weekly-month {
+    width: 65px;
+    flex: unset;
+}
+
+.weekly-search-middle .weekly-year {
+    width: 80px;
+    flex: unset;
+}
+
+.weekly-nav-left {
+    width: 59px;
+    float: left;
+}
+
+.weekly-nav-right {
+    width: 59px;
+    float: right;
+}
