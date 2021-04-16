@@ -5,7 +5,7 @@ require 'uri'
 require_relative '../logger'
 
 # Defines helper classes and methods for dealing with http
-module 
+module HTTP
   def self.get_request(uri, http_headers)
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Get.new(uri.request_uri)
