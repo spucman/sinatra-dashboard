@@ -1,0 +1,30 @@
+.sidebar-fixed.position-fixed
+    a.logo-wrapper href="/pages/": img.img-fluid alt="Logo" src="/assets/logo.svg"
+    ul#side_nav.list-group-flush.list-group
+        - if @user_features.include?('feature.dashboard.userprofile')
+            a href="/pages/profile": li#side_user_profile.list-group-item.d-flex.justify-content-between.align-items-center.list-group-item-action
+                i.mr-3.fas.fa-id-card.text-
+                | User Profiles
+        li.list-group-item.d-flex.justify-content-between.align-items-center.list-group-item-action
+            i.mr-3.fas.fa-mail-bulk.text-
+            | Batch Runs
+            ul.list-group-flush.list-group
+                a href="/pages/report/weekly": li#side_report_weekly.list-group-item.d-flex.justify-content-between.align-items-center.list-group-item-action
+                    i.mr-3.fas.fa-chart-bar.text- 
+                    | Report Run
+                - if @user_features.include?('feature.dashboard.report.preview')
+                    a href="/pages/report/preview": li#side_report_preview.list-group-item.d-flex.justify-content-between.align-items-center.list-group-item-action
+                        i.mr-3.fas.fa-file-alt.text-
+                        | Preview
+    javascript:
+        var currentLocation = window.location.href;
+        if(currentLocation.includes("/pages/profile")) {
+            var active = document.getElementById("side_user_profile");
+            active.classList.add("active");
+        } else if(currentLocation.includes('/pages/report/weekly')) {
+            var active = document.getElementById("side_report_weekly");
+            active.classList.add("active");
+        } else if(currentLocation.includes('/pages/report/preview')) {
+            var active = document.getElementById("side_report_preview");
+            active.classList.add("active");
+        }

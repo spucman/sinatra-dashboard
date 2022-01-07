@@ -1,0 +1,53 @@
+doctype html
+html
+  head
+    title Admin Dashboard
+    include header
+
+  body
+    .flexible-content
+        include navigation
+        main
+          .p-5
+            section#dashboard
+              section#report
+                .mb-4.col-md-9.card
+                  .card-body
+                    .text-center
+                      h5 Report 2020/13 (March 23rd - March 29th)
+                    b-alert :show="error.dismissCountDown" dismissible=true fade=true variant="danger" @dismissed="error.dismissCountDown=0" @dismiss-count-down="errorCountDownChanged"
+                          span {{ error.message }}
+                    div style="display: block;"
+                      canvas#lastReport
+                    .text-right
+                      a.p-2.link-main href="/report/weekly" More...
+              script src="/assets/index.js"
+              javascript:
+                new Vue({
+                  el: '#report',
+                  data: {
+                    runs: [],
+                    error: {
+                        message: '',
+                        dismissCountDown: 0,
+                        dimissSec: 120
+                    }
+                  },
+                  created: function() {
+                    this.fetchReportRun();
+                  },
+                  methods: {
+                    errorCountDownChanged,
+                    showErrorMessage,
+                    fetchReportRun,
+                    createNewReportGraph
+                  }
+                });
+              - if @user_features.include?('feature.dashboard.userprofile')
+                section#userprofile
+                  .mb-4.col-md-9.card
+                    .card-body
+                      form.d-flex.md-form.justify-content-center action="/pages/profile" method="post"
+                        input.form-control aria-label="Search" placeholder="Search for User Profile with ids or emails" type="search" name="search"
+                        button.my-0.btn.btn-main.btn-sm.ripple-parent type="submit"
+                          i.fa.fa-search

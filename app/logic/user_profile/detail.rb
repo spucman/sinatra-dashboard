@@ -40,7 +40,7 @@ module UserProfile
   end
 
   def self.fetch_working_groups(token, user_id)
-    wk = ExtUserProfile.working_groups(token, user_id)
+    wk = ExtUserProfile.fetch_working_groups(token, user_id)
 
     return wk unless wk['error'].nil?
 
@@ -52,6 +52,7 @@ module UserProfile
     def initialize(auth_map, up_map)
       _initialize_up_data(up_map)
       _initialize_auth_data(auth_map)
+      @out_of_sync = _find_out_of_sync_fields(up_map, auth_map)
     end
 
     def _initialize_up_data(map)
@@ -62,7 +63,7 @@ module UserProfile
       end
     end
 
-    def _assign_up_data(data) # rubocop:disable Metrics/AbcSize
+    def _assign_up_data(data)
       @user_id = data['userId']
       @name = "#{data['firstName']} #{data['lastName']}"
       @email = data['email']
@@ -70,7 +71,7 @@ module UserProfile
       @role_name = "#{data['role']['name']} (#{data['role']['key']})"
       @role_key = data['role']['key']
       @timezone = data['timezone']
-      @newsletter_subscription = data['newsletterSubscription']
+      @report_subscription = data['reportSubscription']
     end
 
     def _initialize_auth_data(map)
@@ -81,13 +82,28 @@ module UserProfile
       end
     end
 
-    def _assign_auth_data(data)
+    def _assign_auth_data(map)
+      data = map['data']
       @sign_up_date = Converter.to_user_friendly_date_str(data['signUpDate'])
       @last_signin_date = Converter.to_user_friendly_date_str(data['lastSignInDate'])
       @activation_date = Converter.to_user_friendly_date_str(data['activationDate'])
       @possesses_api_credentials = data['possessesApiCredentials']
       @reset_password_code_creation_time = Converter.to_user_friendly_date_str(data['resetPasswordCodeCreationTime'])
       @reset_password_code_valid = data['resetPasswordCodeValid']
+    end
+
+    def _find_out_of_sync_fields(up_map, auth_map)
+      _get_out_of_sync_fields(up_map['data'], auth_map) if up_map['error'].nil? && auth_map['error'].nil?
+    end
+
+    def _get_out_of_sync_fields(up_data, auth_data) # rubocop:disable Metrics/AbcSize
+      out_of_sync = []
+      out_of_sync << 'firstName' unless up_data['firstName'] == auth_data['firstName']
+      out_of_sync << 'lastName' unless up_data['lastName'] == auth_data['lastName']
+      out_of_sync << 'email' unless up_data['email'] == auth_data['email']
+      out_of_sync << 'activated' unless up_data['activated'] == auth_data['active']
+      out_of_sync << 'userId' unless up_data['userId'] == auth_data['userId']&.to_s
+      out_of_sync
     end
 
     def as_json(_options = {}) # rubocop:disable Metrics/MethodLength
@@ -99,7 +115,7 @@ module UserProfile
         role_name: @role_name,
         role_key: @role_key,
         timezone: @timezone,
-        newsletter_subscription: @newsletter_subscription,
+        report_subscription: @report_subscription,
         sign_up_date: @sign_up_date,
         last_signin_date: @last_signin_date,
         activation_date: @activation_date,

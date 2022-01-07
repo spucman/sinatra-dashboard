@@ -9,9 +9,9 @@ ext:
     access_token: 'secret'
   auth_service:
     url: 'http://auth.example.com'
-  batch_reporting:
+  reporting:
     url: 'http://reporting.example.com'
-    internal_api_version: 'v1'
+    default_user: 'full'
 
 feature:
   change_role:
@@ -19,4 +19,6 @@ feature:
   deactivate_account:
     enabled: false
   logout_user:
+    enabled: false
+  change_role:
     enabled: false

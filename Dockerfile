@@ -1,9 +1,9 @@
-FROM ruby:3.0-slim-buster
+FROM ruby:3.1-slim-bullseye
 
 ENV USER="nonroot"
 
 RUN addgroup $USER \
-    && adduser --ingroup $USER $USER
+    && useradd -ms /bin/bash -g $USER $USER
 
 RUN mkdir -p /usr/src/app/ \
     && chown -R $USER /usr/src/app
@@ -19,11 +19,16 @@ RUN apt-get update \
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY Gemfile Gemfile
+COPY Gemfile.lock Gemfile.lock
 
 RUN bundle config set --local without 'development test' \ 
     && bundle install
 
-USER USER
+COPY . .
 
-ENTRYPOINT  ["bundle", "exec puma -C config/puma.rb"]
+RUN chown -R $USER /usr/src/app
+
+USER $USER
+
+CMD  ["bundle", "exec", "puma", "-C", "/usr/src/app/config/puma.rb"]

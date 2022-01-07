@@ -66,8 +66,8 @@ module Authentication
       @features.include?(Feature::DASHBOARD_USER_PROFILE_REVOKE_TOKEN)
     end
 
-    def allowed_to_switch_product_plan?
-      @features.include?(Feature::DASHBOARD_USER_PROFILE_SWITCH_PRODUCT_PLAN)
+    def allowed_to_switch_role?
+      @features.include?(Feature::DASHBOARD_USER_PROFILE_SWITCH_ROLE)
     end
 
     def as_json(_options = {})

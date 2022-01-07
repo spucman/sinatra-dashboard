@@ -63,7 +63,7 @@ module UserProfile
       @name = "#{data['firstName']} #{data['lastName']}"
       @email = data['email']
       @activated = data['activated']
-      @product_plan = data['role']['name']
+      @role = data['role']['name']
       @timezone = data['timezone']
     end
 
@@ -73,7 +73,7 @@ module UserProfile
         name: @name,
         email: @email,
         activated: @activated,
-        product_plan: @product_plan,
+        role: @role,
         timezone: @timezone
       }
     end

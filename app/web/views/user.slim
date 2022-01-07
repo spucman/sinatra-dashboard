@@ -1,0 +1,269 @@
+doctype html
+html
+  head
+    title Admin Dashboard - User
+    include header
+
+  body
+    .flexible-content
+        include navigation
+        main
+          .p-5
+            section#dashboard
+                section#userprofile
+                  .mb-4.card  
+                    .card-header
+                        .d-sm-flex.justify-content-between
+                            h3.mb-sm-0.pt-2 
+                                i.mr-3.fas.fa-id-card.dark-color
+                                span {{user.name}} - {{user.role_name}} ({{user.timezone}})
+                                i.fa.fa-refresh.sync-warn aria-hidden="true" data-toggle="tooltip" title="Name not in sync" v-if="isNameNotSynced"
+                            form.d-flex.md-form.justify-content-center.form-lg style="margin: 0px; width: 30%;" action="/pages/profile" method="post" ref="form"
+                                input#search.form-control ref="search" aria-label="Search" placeholder="Search with ids or emails" type="search" name="search"
+                                button.my-0.btn.btn-main.btn-sm.ripple-parent v-on:click="onSearchClick($event)"
+                                    i.fa.fa-search
+                    b-navbar.dark-background type="dark"
+                        b-navbar-nav
+                            b-nav-item-dropdown text="Account"
+                                b-dropdown-item href="#" @click="onActivateUserClick" v-if="!user.activated" Activate User
+                                b-dropdown-item href="#" @click="onResendResetPasswordEmailClick" Resent Password Email
+                                - if @feature_flags.deactivate_account.enabled || @feature_flags.logout_user.enabled
+                                    b-dropdown-group#dropdown-group-account-qa header="QA"
+                                        - if @feature_flags.deactivate_account.enabled
+                                            b-dropdown-item href="#" @click="onDeactivateUserClick" Deactivate User (QA)
+                                        - if @feature_flags.logout_user.enabled
+                                            b-dropdown-item href="#" @click="onLogoutUserClick" Logout User (QA)
+                                - if @feature_flags.change_role.enabled
+                                    b-dropdown-item href="#" @click="onSwitchRoleClick" Switch Role (QA)
+                        b-navbar-nav.ml-auto
+                            b-nav-item.navbar-space :href="webshopLink" target="_blank" 
+                                img.navbar-img alt="Woo Commerce" src="/assets/woo.svg"
+                            b-nav-item v-on:click="isTableEssential = !isTableEssential" {{ isTableEssential ? 'Full' : 'Essential' }}
+                    .card-body
+                        b-alert show=true dismissible=true variant="danger" v-if="user.error"
+                            ul
+                                li v-for="error in user.error" {{ error }}
+                        b-alert show=true dismissible=true variant="warning" v-if="user.out_of_sync"
+                            i.fa.fa-refresh
+                            span Fields not in sync between auth and user profile service:
+                            ul
+                                li v-for="field in user.out_of_sync" {{ field }}
+                        b-alert :show="success.dismissCountDown" dismissible=true fade=true variant="success" @dismissed="success.dismissCountDown=0" @dismiss-count-down="succcessCountDownChanged"
+                            span {{ success.message }}
+                        b-alert :show="error.dismissCountDown" dismissible=true fade=true variant="danger" @dismissed="error.dismissCountDown=0" @dismiss-count-down="errorCountDownChanged"
+                            span {{ error.message }}
+
+                        .d-sm-flex.justify-content-between
+                            div
+                                strong Last Sign In: 
+                                | {{user.last_signin_date}}
+                        table.table.table-sm
+                            tbody
+                                tr v-if="isTableEssential"
+                                    td 
+                                        table.table.table-hover.compact
+                                            tbody
+                                                tr
+                                                    td: span UserId
+                                                    td 
+                                                      span {{user.user_id}} 
+                                                      i.fa.fa-refresh.sync-warn aria-hidden="true" data-toggle="tooltip" title="UserId not in sync" v-if="isUserIdNotSynced"
+                                                tr 
+                                                    td: span Email
+                                                    td 
+                                                      span {{user.email}}
+                                                      i.fa.fa-refresh.sync-warn aria-hidden="true" data-toggle="tooltip" title="Email not in sync" v-if="isEmailNotSynced"
+                                                tr
+                                                    td
+                                                        span Activated 
+                                                        | {{ user.activation_date ? '(' + user.activation_date + ')' : '' }}
+                                                    td 
+                                                        span {{user.activated}}
+                                                        i.fa.fa-refresh.sync-warn aria-hidden="true" data-toggle="tooltip" title="Activation not in sync" v-if="isActivatedNotSynced"
+                                    td
+                                        table.table.table-hover.compact
+                                            tbody
+                                                tr
+                                                    td: span Is Reset Password Code Valid
+                                                    td {{user.reset_password_code_valid}}
+                                                tr
+                                                    td Reset Password Code Creation Time
+                                                    td {{user.reset_password_code_creation_time}}
+                                                tr
+                                                    td Sign Up Date
+                                                    td {{user.sign_up_date}}
+                                tr v-if="!isTableEssential"
+                                    td 
+                                        table.table.table-hover.compact
+                                            tbody
+                                                tr
+                                                    td: span UserId
+                                                    td 
+                                                        span {{user.user_id}}
+                                                        i.fa.fa-refresh.sync-warn aria-hidden="true" data-toggle="tooltip" title="UserId not in sync" v-if="isUserIdNotSynced"
+                                                tr 
+                                                    td: span Email
+                                                    td 
+                                                        span {{user.email}}
+                                                        i.fa.fa-refresh.sync-warn aria-hidden="true" data-toggle="tooltip" title="Email not in sync" v-if="isEmailNotSynced"
+                                                tr
+                                                    td
+                                                        span Activated 
+                                                        | ({{user.activation_date}})
+                                                    td 
+                                                        span {{user.activated}}
+                                                        i.fa.fa-refresh.sync-warn aria-hidden="true" data-toggle="tooltip" title="Activation not in sync" v-if="isActivatedNotSynced"
+                                                tr
+                                                    td Sign Up Date
+                                                    td {{user.sign_up_date}}
+                                                
+                                    td
+                                        table.table.table-hover.compact
+                                            tbody
+                                                tr
+                                                    td: span Is Reset Password Code Valid
+                                                    td {{user.reset_password_code_valid}}
+                                                tr
+                                                    td Reset Password Code Creation Time
+                                                    td {{user.reset_password_code_creation_time}}
+                                                tr 
+                                                    td Possesses API Credentials
+                                                    td {{user.possesses_api_credentials}}                                                
+                                tr v-if="!isTableEssential"
+                                    td
+                                        table.table.table-hover.compact
+                                            tbody
+                                                tr
+                                                    td In Trial
+                                                    td {{ user.in_subscription_trial ? user.in_subscription_trial : 'false' }}
+                                                tr
+                                                    td Eligible for Trial
+                                                    td {{ user.eligible_for_subscription_trial ? user.eligible_for_subscription_trial : 'false' }}
+                                    td
+                                        table.table.table-hover.compact
+                                            tbody
+                                                tr
+                                                    td Report Subscription
+                                                    td {{user.reports_subscription}}
+                                                tr
+                                                    td Expiration Date (Subscription)
+                                                    td {{user.subscription_expiration_date}}
+
+                        div v-if="workingGroups.length > 0"
+                            b-button.btnCaption variant="link" block=true v-b-toggle="'collapseWorkingGroups'" size="lg" style="padding-left: 0;" Working Groups ({{ workingGroups.length }})
+                            b-collapse#collapseWorkingGroups
+                                b-table-lite.compact :items="workingGroups" :fields="wgFields" hover=true striped=true small=true responsive=true
+                                    <template v-slot:cell(show_details)="row">
+                                        b-button variant="link" size="sm" @click="row.toggleDetails" style="padding: 0; font-size: inherit; font-weight: inherit; text-transform: none; margin: inherit; line-height: inherit;" {{ row.detailsShowing ? 'Hide' : 'Show'}} Memberships
+                                    </template>
+                                    template v-slot:row-details="row"
+                                       div.subTablePadding
+                                            b-button.btnCaption.subTableCaption variant="link" block=true v-b-toggle="'collapseWorkingGroupsMembers' + row.item.id" size="lg" style="padding-left: 0; padding-bottom: 0.1rem;" Members ({{ row.item.members.length }})
+                                            b-collapse v-bind:id="'collapseWorkingGroupsMembers' + row.item.id" visible=true
+                                                table.table.table-hover.table-sm.compact
+                                                    thead
+                                                        tr
+                                                            td: span UserId
+                                                            td: span Name
+                                                            td: span Role
+                                                            td: span Join Date
+                                                    tbody
+                                                        template v-for="member in row.item.members"
+                                                            tr
+                                                                td {{ member.user_id }}
+                                                                td {{ `${member.email} (${member.firstName} ${member.lastName})` }}
+                                                                td {{ member.role }}
+                                                                td {{ member.joinDate }}
+                                            b-button.btnCaption variant="link" block=true v-b-toggle="'collapseWorkingGroupsPendingInvites' + row.item.id" size="lg" style="padding-left: 0; padding-bottom: 0.1rem;" Pending Invites ({{ row.item.pendingInvites ? row.item.pendingInvites.length : 0 }})
+                                            b-collapse v-bind:id="'collapseWorkingGroupsPendingInvites' + row.item.id"
+                                                table.table.table-hover.table-sm.compact
+                                                    thead
+                                                        tr
+                                                            td: span Email
+                                                            td: span Invitation Date
+                                                            td: span Last Notification Date
+                                                    tbody
+                                                        template v-for="invite in row.item.pendingInvites"
+                                                            tr
+                                                                td {{ invite.email }}
+                                                                td {{ invite.invitationDate }}
+                                                                td {{ invite.lastNotificationDate }}
+                                            b-button.btnCaption.subTableCaption variant="link" block=true v-b-toggle="'collapseWorkingGroupsRetiredMembers' + row.item.id" size="lg" style="padding-left: 0; padding-bottom: 0.1rem;" Retired Members ({{ row.item.retiredMembers ? row.item.retiredMembers.length : 0 }})
+                                            b-collapse v-bind:id="'collapseWorkingGroupsRetiredMembers' + row.item.id"
+                                                table.table.table-hover.table-sm.compact
+                                                    thead
+                                                        tr
+                                                            td: span userId
+                                                            td: span Name
+                                                    tbody
+                                                        template v-for="rmember in row.item.retiredMembers"
+                                                            tr
+                                                                td {{ rmember.user_id }}
+                                                                td {{ `${rmember.firstName} ${rmember.lastName}` }}
+                        div v-else=true
+                            b-button.btnCaption variant="link" block=true size="lg" style="padding-left: 0;" Working Groups ({{ workingGroups.length }})
+
+  script src="/assets/user.js"
+  javascript:
+    new Vue({
+        el: '#userprofile',
+        data: {
+            isTableEssential: true,
+            user: {},
+            wgFields:[
+                 {
+                    key: 'id',
+                    label: 'Working Group Id'
+                },
+                { key: 'name' },
+                { key: 'show_details' }
+            ],
+            workingGroups: [],
+            success: {
+                message: '',
+                dismissCountDown: 0,
+                dismissSec: 5
+            },
+            error: {
+                message: '',
+                dismissCountDown: 0,
+                dismissSec: 120
+            }
+        },
+        watch: {
+            user: refreshWG
+        },
+        computed: {
+            webshopLink () {
+                return `https://woocommerce.com/wp-admin/edit.php?s=${this.user.email}&post_status=all&post_type=shop_order&action=-1&m=0&date_predefined&date_from&date_to&_customer_user&shop_order_subtype&paged=1&action2=-1`;
+            },
+            isNameNotSynced () {
+                return this.user.out_of_sync && (this.user.out_of_sync.includes('firstName') || this.user.out_of_sync.includes('lastName'));
+            },
+            isEmailNotSynced() {
+                return this.user.out_of_sync && this.user.out_of_sync.includes('email');
+            },
+            isUserIdNotSynced() {
+                return this.user.out_of_sync && this.user.out_of_sync.includes('userId');
+            },
+            isActivatedNotSynced() {
+                return this.user.out_of_sync && this.user.out_of_sync.includes('activated');
+            }
+        },
+        methods: {
+            succcessCountDownChanged,
+            showSuccessMessage,
+            errorCountDownChanged,
+            showErrorMessage,
+            sendCallToServerWithConfirmationBox,
+            onSearchClick: search,
+            onActivateUserClick: activateUser,
+            onResendResetPasswordEmailClick: sendResetPasswordEmail,
+            onDeactivateUserClick: deactivateUser,
+            onLogoutUserClick: logoutUser,
+            onSwitchRoleClick: switchRole
+        },
+        beforeMount() {
+           this.user = #{{@user}}
+        }
+    });

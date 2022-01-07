@@ -7,6 +7,6 @@ module Converter
   def self.to_user_friendly_date_str(input_str)
     return nil if input_str.nil? || input_str.empty?
 
-    DateTime.iso8601(input_str).strftime('%F %H:%M:%S')
+    DateTime.strptime(input_str, '%Y-%m-%dT%H:%M:%S').strftime('%F %H:%M:%S')
   end
 end

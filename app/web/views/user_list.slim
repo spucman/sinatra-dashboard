@@ -1,0 +1,65 @@
+doctype html
+html
+  head
+    title Admin Dashboard - User
+    include header
+
+  body
+    .flexible-content
+        include navigation
+        main
+          .p-5
+            section#dashboard
+                section#userlist
+                  .mb-4.card  
+                    .card-header
+                        .d-sm-flex.justify-content-between
+                            h3.mb-sm-0.pt-2 
+                                i.mr-3.fas.fa-id-card.dark-color 
+                                span Users
+                            form.d-flex.md-form.justify-content-center.form-lg style="margin: 0px; width: 30%;" action="/pages/profile" method="post" ref="form"
+                                    input#search.form-control ref="search" aria-label="Search" placeholder="Search with ids or emails" type="search" name="search"
+                                    button.my-0.btn.btn-main.btn-sm.ripple-parent v-on:click="onSearchClick($event)"
+                                        i.fa.fa-search
+                    .card-body
+                        b-alert :show="error.dismissCountDown" dismissible=true fade=true variant="danger" @dismissed="error.dismissCountDown=0" @dismiss-count-down="errorCountDownChanged"
+                            span {{ error.message }}
+                        b-table.compact ref="selectableTable" :items="userList" :fields="userFields" small=true hover=true responsive=true selectable=true @row-selected="onRowSelected" select-mode="single"
+
+    script src="/assets/user_list.js"
+    javascript :
+        new Vue({
+            el: '#userlist',
+            data: {
+                userFields: [
+                    { key: 'user_id', label: 'Id' },
+                    { key: 'name' },
+                    { key: 'email', sortable: true },
+                    { key: 'activated', sortable: true },
+                    { key: 'role_name', label: 'Role', sortable: true },
+                    { key: 'timezone', sortable: true }
+                ],
+                userList: #{{@user_list}},
+                error: {
+                    message: '',
+                    dismissCountDown: 0,
+                    dismissSec: 120
+                }
+            },
+            methods: {
+                errorCountDownChanged,
+                showErrorMessage,
+                onRowSelected(items) {
+                    if(items[0]) {
+                        let name = items[0].name;
+                        if(name != "The user doesn't exist" && name != 'N/A') {
+                            let userId = items[0].user_id;
+                            window.location.href = `/pages/profile/${userId}`;
+                        } else {
+                            this.$refs.selectableTable.clearSelected();
+                        }
+                    }
+                },
+                onSearchClick: search
+            }
+        });

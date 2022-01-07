@@ -29,12 +29,12 @@ module ExtAuth
 
   def self._post(uri:, token:, payload:, error_message:)
     HTTP.post(
-      uri: _create_rest_url(uri),
+      uri: _create_url(uri),
       payload: JSON.generate(payload),
-      token: token,
+      token:,
       client_error_fn: method(:_handle_client_error),
       error_class: AuthServiceError,
-      error_message: error_message
+      error_message:
     )
   end
 

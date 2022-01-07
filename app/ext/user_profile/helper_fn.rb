@@ -7,6 +7,8 @@ require_relative '../http'
 
 # Defines calls to the external user profile service
 module ExtUserProfile
+  class UserProfileServiceError < RuntimeError; end
+
   def self._create_url(uri)
     URI("#{Settings.ext.userprofile.url}/rest/v1#{uri}")
   end
@@ -31,22 +33,20 @@ module ExtUserProfile
     HTTP.post(
       uri: _create_url(uri),
       payload: JSON.generate(payload),
-      token: token,
+      token:,
       client_error_fn: method(:_handle_client_error),
       error_class: UserProfileServiceError,
-      error_message: error_message
+      error_message:
     )
   end
 
   def self._get(uri:, token:, error_message:)
     HTTP.get(
       uri: _create_url(uri),
-      token: token,
+      token:,
       client_error_fn: method(:_handle_client_error),
       error_class: UserProfileServiceError,
-      error_message: error_message
+      error_message:
     )
   end
-
-  class UserProfileServiceError < RuntimeError; end
 end

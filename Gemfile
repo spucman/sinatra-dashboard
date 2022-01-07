@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 gem 'babel-transpiler'
 gem 'config'
+gem 'mini_racer'
 gem 'puma'
 gem 'puma-metrics'
 gem 'rack-contrib'
@@ -14,6 +15,7 @@ gem 'sinatra'
 gem 'slim'
 gem 'sprockets'
 gem 'sprockets-helpers'
+gem 'uglifier'
 gem 'warden'
 gem 'webmock'
 
@@ -22,5 +24,4 @@ group :development, :test do
   gem 'rerun'
   gem 'rspec'
   gem 'rubocop'
-  gem 'uglifier'
 end

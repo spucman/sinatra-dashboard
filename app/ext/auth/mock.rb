@@ -13,33 +13,41 @@ module ExtAuth
     email = user.email
 
     WebMock::API.stub_request(:post, _create_url('/user/sign-in'))
-                .with(body: { 'email': email, 'password': email })
-                .to_return(body: JSON.generate({ 'email': email, 'token': user.token, 'userId': user.user_id }))
+                .with(body: { email:, password: email })
+                .to_return(body: JSON.generate({ email:, token: user.token, userId: user.user_id }))
   end
 
   def self._create_fetch_auth_meta_data_stub(token)
-    MockData::ALL_USERS.each do |user|
-      resp = _create_auth_meta_json_response(user)
-      WebMock::API.stub_request(:post, _create_url('/user/search'))
-                  .with(headers: HTTP.create_json_headers(token), body: { 'email': user.email })
-                  .to_return(body: resp)
+    WebMock::API.stub_request(:post, _create_url('/user/search'))
+                .with(headers: HTTP.create_json_headers(token))
+                .to_return(status: 404)
 
-      WebMock::API.stub_request(:post, _create_url('/user/search'))
-                  .with(headers: HTTP.create_json_headers(token), body: { 'userId': user.user_id })
-                  .to_return(body: resp)
+    MockData::ALL_USERS.each do |user|
+      _create_fetch_auth_meta_data_stub_for_user(token, user)
     end
+  end
+
+  def self._create_fetch_auth_meta_data_stub_for_user(token, user)
+    resp = _create_auth_meta_json_response(user)
+    WebMock::API.stub_request(:post, _create_url('/user/search'))
+                .with(headers: HTTP.create_json_headers(token), body: { email: user.email })
+                .to_return(body: resp)
+
+    WebMock::API.stub_request(:post, _create_url('/user/search'))
+                .with(headers: HTTP.create_json_headers(token), body: { userId: user.user_id })
+                .to_return(body: resp)
   end
 
   def self._create_auth_meta_json_response(user) # rubocop:disable Metrics/MethodLength
     JSON.generate(
       {
-        'data': {
-          'signUpDate': user.sign_up_date,
-          'lastSignInDate': user.last_signin_date,
-          'activationDate': user.activation_date,
-          'possessesApiCredentials': user.possesses_api_credentials,
-          'resetPasswordCodeCreationTime': user.reset_password_code_creation_time,
-          'resetPasswordCodeValid': user.reset_password_code_valid
+        data: {
+          signUpDate: user.sign_up_date,
+          lastSignInDate: user.last_signin_date,
+          activationDate: user.activation_date,
+          possessesApiCredentials: user.possesses_api_credentials,
+          resetPasswordCodeCreationTime: user.reset_password_code_creation_time,
+          resetPasswordCodeValid: user.reset_password_code_valid
         }
       }
     )
@@ -54,17 +62,22 @@ module ExtAuth
 
   def self._create_activate_user_with_token_stub(token, email)
     WebMock::API.stub_request(:post, _create_url('/user/activate'))
-                .with(headers: HTTP.create_json_headers(token), body: { 'email': email })
+                .with(headers: HTTP.create_json_headers(token), body: { email: })
   end
 
   def self._create_deactivate_user_with_token_stub(token, email)
     WebMock::API.stub_request(:post, _create_url('/user/deactivate'))
-                .with(headers: HTTP.create_json_headers(token), body: { 'email': email })
+                .with(headers: HTTP.create_json_headers(token), body: { email: })
   end
 
   def self._create_send_reset_password_email_stub(email)
     WebMock::API.stub_request(:post, _create_url('/user/reset-password-mail'))
-                .with(body: { 'email': email })
+                .with(body: { email: })
+  end
+
+  def self._logout_user_from_all_devices(token, user_id)
+    WebMock::API.stup_request(:post, _create_url('/user/revoke-access'))
+                .with(headers: HTTP.create_json_headers(token), body: { userId: user_id })
   end
 
   MockData::ALL_USERS.each do |user|

@@ -7,11 +7,11 @@ require_relative '../http'
 # Defines calls to the external user profile service
 module ExtUserProfile
   def self.fetch_user_by_email(token, email)
-    _fetch_user(token, { 'email' => email })
+    _fetch_user(token, { email: })
   end
 
   def self.fetch_user_by_id(token, user_id)
-    _fetch_user(token, { 'userId' => user_id })
+    _fetch_user(token, { userId: user_id })
   end
 
   def self.search_for_user(token, search_string)
@@ -19,9 +19,9 @@ module ExtUserProfile
     return users if search_string.empty?
 
     if URI::MailTo::EMAIL_REGEXP =~ search_string
-      users.push(fetch_user(token, { 'email' => search_string }))
+      users.push(fetch_user(token, { email: search_string }))
     elsif term.match?(/\A-?\d+\Z/)
-      users.push(fetch_user(token, { 'userId' => search_string }))
+      users.push(fetch_user(token, { userId: search_string }))
     end
 
     users
@@ -31,7 +31,7 @@ module ExtUserProfile
     _post(
       uri: '/user/profile/search',
       payload: content,
-      token: token,
+      token:,
       error_message: 'Unable to fetch users from userprofile'
     )
   end
@@ -39,7 +39,7 @@ module ExtUserProfile
   def self.fetch_current_user_profile(token)
     HTTP.get(
       uri: _create_url('/user/profile'),
-      token: token,
+      token:,
       client_error_fn: method(:_handle_current_profile_client_error),
       error_class: UserProfileServiceError,
       error_message: 'Unable to fetch profile for current user'
@@ -63,7 +63,7 @@ module ExtUserProfile
   def self.fetch_working_groups(token, user_id)
     _get(
       uri: "/user/profile/#{user_id}/wg",
-      token: token,
+      token:,
       error_message: 'Unable to fetch working groups from userprofile'
     )
   end

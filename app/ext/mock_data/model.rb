@@ -24,17 +24,21 @@ module MockData
     keyword_init: true
   )
 
-  WorkingGroup = Struct.new(:id, :name, :wg_members, :wg_pending_invites, :can_be_deleted)
-  WGMember = Struct.new(:id, :first_name, :last_name, :join_date, :email, :role)
-  WGPendingInvite = Struct.new(:email, :inviter, :invitation_date, :last_notification_date)
+  WorkingGroup = Struct.new(:id, :name, :wg_members, :wg_pending_invites, :can_be_deleted, keyword_init: true)
+  WGMember = Struct.new(:id, :user_id, :first_name, :last_name, :join_date, :email, :role, keyword_init: true)
+  WGPendingInvite = Struct.new(:email, :inviter, :invitation_date, :last_notification_date, keyword_init: true)
+
+  BatchRunData = Struct.new(:timezone, :success_count, :failure_count, keyword_init: true)
 
   def self._create_member_from_user(user, join_date, role)
     WGMember.new(
       id: user.user_id,
+      user_id: user.user_id,
       first_name: user.first_name,
       last_name: user.last_name,
-      join_date: join_date,
-      role: role
+      email: user.email,
+      join_date:,
+      role:
     )
   end
 end

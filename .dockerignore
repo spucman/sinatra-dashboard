@@ -4,3 +4,4 @@ docs
 .idea
 .git
 *.iml
+.rubocop.yml
