@@ -28,3 +28,15 @@ make run
 bundler install
 bundler exec puma -C config/puma.rb
 ```
+
+## Users
+
+With in that app bundle there are three users predefined:
+
+| User | Password | Role |
+| --- | --- | --- |
+| admin@example.com | admin@example.com | Admin |
+| user@example.com | user@example.com | User |
+| report@example.com | report@example.com | Report |
+
+You can search for each of those users within the app.
